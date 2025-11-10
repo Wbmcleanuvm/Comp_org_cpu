@@ -172,24 +172,9 @@ class Alu:
         """
         a &= WORD_MASK  # Keep this line as is
 
-        shift_amt = abs(b) & 0xF  # mask to 4 bits
-        if b == 0:
-            result = a
-            bit_out = None
-        elif b > 0:  # left shift
-            if shift_amt == 0:
-                result = a
-                bit_out = None
-            else:
-                result = (a << shift_amt) & WORD_MASK
-                bit_out = (a >> (WORD_SIZE - shift_amt)) & 1
-        else:  # right shift
-            if shift_amt == 0:
-                result = a
-                bit_out = None
-            else:
-                result = (a >> shift_amt) & WORD_MASK
-                bit_out = (a >> (shift_amt - 1)) & 1
+        # Replace these two lines with a complete implementation
+        result = 0
+        bit_out = 0
 
         # Keep these last two lines as they are
         self._update_shift_flags(result, bit_out)
