@@ -156,7 +156,11 @@ class Alu:
         """re
         Bitwise OR
         """
-        pass  # replace pass with correct implementation
+        a = a & WORD_MASK
+        b = b & WORD_MASK
+        result = (b | a) & WORD_MASK
+        self.update_arith_flags_or(a, b, result)
+        return result
 
     def _shft(self, a, b):
         """
