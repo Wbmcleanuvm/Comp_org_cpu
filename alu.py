@@ -61,6 +61,16 @@ class Alu:
             "SHFT" : self._shft
         }
 
+    def set_op(self, op):
+        """
+        Public-facing setter. Added 2025-11-09. Students will need to add this
+        to their ALU implementation.
+        """
+        if op in self._ops.keys():
+            self._op = op
+        else:
+            raise ValueError(f"Bad op: {op}")
+    
     def decode(self, c):
         """
         Decode control signal to determine operation.
@@ -172,9 +182,15 @@ class Alu:
         """
         a &= WORD_MASK  # Keep this line as is
 
-        # Replace these two lines with a complete implementation
-        result = 0
-        bit_out = 0
+        if b > 0:
+            # Left shift
+            bit_out = (a >> (WORD_SIZE - 1)) & 0b1 if b <= WORD_SIZE else 0
+            result = (a << b) & WORD_MASK
+        elif b < 0:
+            # Right shift
+            shift_amount = -b
+            bit_out = (a >> (shift_amount - 1)) & 0b1 if shift_amount <= WORD_SIZE else 0
+            result = (a >> shift_amount) & WORD_MASK
 
         # Keep these last two lines as they are
         self._update_shift_flags(result, bit_out)
