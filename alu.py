@@ -134,10 +134,9 @@ class Alu:
         """
         SUB
         """
-        #not it
-        result = add(self, a, ~b)
-        
-        
+        a= a & WORD_MASK
+        b = b & WORD_MASK
+        result = (a - b) & WORD_MASK    
         self.update_arith_flags_sub(a, b, result)
         return result
         
