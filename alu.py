@@ -173,8 +173,12 @@ class Alu:
         a &= WORD_MASK  # Keep this line as is
 
         # Replace these two lines with a complete implementation
-        result = 0
-        bit_out = 0
+        if b > 0:
+            result = (a << b) & WORD_MASK
+            bit_out = (a >> (WORD_SIZE - b)) & 0b1
+        elif b < 0:
+            result = (a >> -b) & WORD_MASK
+            bit_out = (a >> (-b - 1)) & 0b1
 
         # Keep these last two lines as they are
         self._update_shift_flags(result, bit_out)
