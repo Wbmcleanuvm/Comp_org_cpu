@@ -70,13 +70,13 @@ class Alu:
             case 0b000:
                 self._op = "ADD"
             case 0b001:
-                self.op = "SUB"
+                self._op = "SUB"
             case 0b010:
-                self.op = "AND"
+                self._op = "AND"
             case 0b011:
-                self.op = "OR"
+                self._op = "OR"
             case 0b100:
-                self.op = "SHFT"
+                self._op = "SHFT"
             case _:
                 raise ValueError("Invalid control signal")
         # Return value is for testing.
@@ -100,12 +100,12 @@ class Alu:
     @property
     def carry(self):
         # Return carry flag
-        return bool(self.flags & C_FLAG)
+        return bool(self._flags & C_FLAG)
 
     @property
     def overflow(self):
         # Return overflow flag
-        return bool(self.flags & V_FLAG)
+        return bool(self._flags & V_FLAG)
 
     def execute(self, a, b):
         """
@@ -137,7 +137,7 @@ class Alu:
         a= a & WORD_MASK
         b = b & WORD_MASK
         result = (a - b) & WORD_MASK    
-        self.update_arith_flags_sub(a, b, result)
+        self._update_arith_flags_sub(a, b, result)
         return result
         
 
@@ -148,17 +148,17 @@ class Alu:
         a = a & WORD_MASK
         b = b & WORD_MASK
         result = (b & a) & WORD_MASK
-        self.update_arith_flags_and(a, b, result)
+        self._update_logic_flags(result)
         return result
 
     def _or(self, a, b):
-        """re
+        """
         Bitwise OR
         """
         a = a & WORD_MASK
         b = b & WORD_MASK
         result = (b | a) & WORD_MASK
-        self.update_arith_flags_or(a, b, result)
+        self._update_logic_flags(result)
         return result
 
     def _shft(self, a, b):
@@ -172,9 +172,24 @@ class Alu:
         """
         a &= WORD_MASK  # Keep this line as is
 
-        # Replace these two lines with a complete implementation
-        result = 0
-        bit_out = 0
+        shift_amt = abs(b) & 0xF  # mask to 4 bits
+        if b == 0:
+            result = a
+            bit_out = None
+        elif b > 0:  # left shift
+            if shift_amt == 0:
+                result = a
+                bit_out = None
+            else:
+                result = (a << shift_amt) & WORD_MASK
+                bit_out = (a >> (WORD_SIZE - shift_amt)) & 1
+        else:  # right shift
+            if shift_amt == 0:
+                result = a
+                bit_out = None
+            else:
+                result = (a >> shift_amt) & WORD_MASK
+                bit_out = (a >> (shift_amt - 1)) & 1
 
         # Keep these last two lines as they are
         self._update_shift_flags(result, bit_out)
@@ -191,7 +206,10 @@ class Alu:
         return x
 
     def _update_logic_flags(self, result):
-        pass  # replace pass with correct implementation
+        if result & (1 << (WORD_SIZE - 1)):
+            self._flags |= N_FLAG
+        if result == 0:
+            self._flags |= Z_FLAG
 
     def _update_arith_flags_add(self, a, b, result):
         """
@@ -211,7 +229,23 @@ class Alu:
             self._flags |= V_FLAG
 
     def _update_arith_flags_sub(self, a, b, result):
-        pass  # replace pass with correct implementation
+        if result & (1 << (WORD_SIZE - 1)):
+            self._flags |= N_FLAG
+        if result == 0:
+            self._flags |= Z_FLAG
+        if a >= b:  # no borrow
+            self._flags |= C_FLAG
+        sa = (a >> (WORD_SIZE - 1)) & 1
+        sb = (b >> (WORD_SIZE - 1)) & 1
+        sr = (result >> (WORD_SIZE - 1)) & 1
+        if sa != sb and sr != sa:
+            self._flags |= V_FLAG
 
     def _update_shift_flags(self, result, bit_out):
-        pass  # replace pass with correct implementation
+        if result & (1 << (WORD_SIZE - 1)):
+            self._flags |= N_FLAG
+        if result == 0:
+            self._flags |= Z_FLAG
+        if bit_out is not None:
+            if bit_out:
+                self._flags |= C_FLAG
