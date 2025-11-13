@@ -1,4 +1,10 @@
 """
+Group names:
+Will Mclean
+Sam Parkin
+Micheal Pavlou
+
+
 Starter code for Catamount Processor Unit ALU
 
 We are limited to 16 bits, and five operations: ADD, SUB, AND, OR, and SHFT.

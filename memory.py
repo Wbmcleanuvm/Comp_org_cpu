@@ -31,28 +31,41 @@ class Memory:
 
     def write_enable(self, b):
         # Make sure `b` is a Boolean (hint: use `isinstance()).
+        if isinstance(b, bool):
+            self._write_enable = b
+            return
         # If not, raise `TypeError`. If OK, then set
+        else:
+            TypeError("Write enable flag must be Boolean.")
         # `_write_enable` accordingly. Replace `pass` below.
-        pass
 
     def read(self, addr):
         """
         Return 16-bit word from memory (default if never written).
         """
+        if self._check_addr(addr):
+            return self._cells.get(addr, self.default)
+        else:
+            return None        
+
         # Make sure `addr` is OK by calling `_check_addr`. If OK, return value
         # from `_cells` or default if never written. (Hint: use `.get()`.)
         # Replace `pass` below.
-        pass
 
     def write(self, addr, value):
         """
         Write 16-bit word to memory, masking to 16 bits.
         """
-        # Check to see if `_write_enable` is true. If not, raise `RuntimeError`.
-        # Otherwise, call `_check_addr()`. If OK, write masked value to the
-        # selected address, then turn off `_write_enable` when done. Return
+        # Check to see if `_write_enable` is true. If not, raise `RuntimeError`
+        if self._write_enable == True:
+             # Otherwise, call `_check_addr()`. If OK, write masked value to the
+            if self._check_addr() == True:
+                self.write(addr, value)
+            # selected address, then turn off `_write_enable` when done. Return
+            self.write_enable(self, False)
+        else:
+            raise RuntimeError("Write attempted while write enable off.")
         # `True` on success. Replace `pass` below.
-        pass
         return True
 
     def hexdump(self, start=0, stop=None, width=8):
@@ -120,12 +133,17 @@ class InstructionMemory(Memory):
         Load list of 16-bit words into consecutive memory cells.
         """
         self._loading = True
+        self._write_enable(self,True)
         # Write each word in `words` to successive addresses in instruction
         # memory. Set `_write_enable` as needed can call parent write with
+        wordsLst = list(enumerate(words))
+        for i, w in wordsLst:
+            super().write(start_addr + i, w)
         # `super().write(start_addr + offset, word)` as needed. Important:
         # Ensure that `_loading` and `_write_enable` are set to `False` when
         # done. (Hint: use `try`/`finally`.) Replace `pass` below.
-        pass
+        self._loading = False
+        self._write_enable(self,False)
 
 
 if __name__ == "__main__":
