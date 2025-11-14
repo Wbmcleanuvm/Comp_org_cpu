@@ -26,7 +26,10 @@ class Memory:
 
     def _check_addr(self, address):
         # Make sure address is positive, in the desired range,
-        # otherwise raise a `ValueError`. Replace `pass` below.
+        if 0 <= address < WORD_SIZE:
+            return True
+        else:
+            ValueError("Address is negative or out of range.")
         pass
 
     def write_enable(self, b):
