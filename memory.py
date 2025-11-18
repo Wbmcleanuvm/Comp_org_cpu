@@ -62,10 +62,10 @@ class Memory:
         # Check to see if `_write_enable` is true. If not, raise `RuntimeError`
         if self._write_enable == True:
              # Otherwise, call `_check_addr()`. If OK, write masked value to the
-            if self._check_addr() == True:
-                self.write(addr, value)
+            if self._check_addr(addr) == True:
+                self._cells[addr] = value & 0xFFFF
             # selected address, then turn off `_write_enable` when done. Return
-            self.write_enable(self, False)
+            self.write_enable(False)
         else:
             raise RuntimeError("Write attempted while write enable off.")
         # `True` on success. Replace `pass` below.
