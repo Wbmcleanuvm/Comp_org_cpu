@@ -26,11 +26,11 @@ class Memory:
 
     def _check_addr(self, address):
         # Make sure address is positive, in the desired range,
-        if  0 <= address and address < STACK_TOP:
-            return True
-        else:
+        if  STACK_BASE < address or address > STACK_TOP:
             ValueError("Address is negative or out of range.")
-        pass
+        else:
+            return True
+
 
     def write_enable(self, b):
         # Make sure `b` is a Boolean (hint: use `isinstance()).

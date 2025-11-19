@@ -58,6 +58,7 @@ class RegisterFile:
         # register objects and include them in a list `self.registers`. Note:
         # register objects should each get a unique name, R0, R1, R2, etc.
         # apart from their index in the list. Replace `pass` below.
+
         self.registers = [Register(f"R{i}") for i in range(self.NUM_REGISTERS)]
 
     def _check_index(self, idx):
@@ -69,7 +70,7 @@ class RegisterFile:
         # `IndexError` with message "Register index out of bounds!" This
         # method needn't have an explicit return. Replace `pass` below.
         if idx is None or idx < 0 or idx >= self.NUM_REGISTERS:
-            raise IndexError("Register index out of bounds D:")
+            raise IndexError("Register index out of bounds!")
 
     def _read(self, ra, rb):
         """
