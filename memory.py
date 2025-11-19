@@ -13,7 +13,7 @@ First released: 2025-11-10
   - Moved definition of `STACK_BASE` to `constants.py`.
 """
 
-from constants import STACK_BASE, WORD_SIZE
+from constants import STACK_BASE, WORD_SIZE, WORD_MASK, STACK_TOP
 
 
 class Memory:
@@ -26,7 +26,7 @@ class Memory:
 
     def _check_addr(self, address):
         # Make sure address is positive, in the desired range,
-        if 0 <= address < WORD_SIZE:
+        if  0 <= address and address < STACK_TOP:
             return True
         else:
             ValueError("Address is negative or out of range.")
