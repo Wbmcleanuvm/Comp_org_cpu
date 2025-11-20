@@ -1,4 +1,7 @@
 """
+Sam Parkin
+Will McLean
+Micheal Pavlou
 In our Catamount Processing Unit we have eight general purpose registers.
 These do not include special-purpose registers elsewhere in the CPU:
   - instruction register,

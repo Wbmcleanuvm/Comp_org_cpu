@@ -1,4 +1,7 @@
 """
+Will McLean
+Sam Parking 
+Micheal Pavlou
 We're going with Harvard architecture here. So we'll have two separate
 address spaces, one for data and one for instructions. A portion of data
 memory is reserved for the stack (addresses between 0xFFFF and 0xFF00).
