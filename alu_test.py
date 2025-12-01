@@ -430,7 +430,6 @@ TEST_CASES = [
         },
         "comment": "Right shift by 15 with MSB=1; all bits shifted out.",
     },
-
 ]
 
 
