@@ -39,7 +39,6 @@ class Memory:
         # Make sure `b` is a Boolean (hint: use `isinstance()).
         if isinstance(b, bool):
             self._write_enable = b
-            return
         # If not, raise `TypeError`. If OK, then set
         else:
             TypeError("Write enable flag must be Boolean.")
@@ -52,7 +51,7 @@ class Memory:
         if self._check_addr(addr):
             return self._cells.get(addr, self.default)
         else:
-            return None        
+            return 0x0   
 
         # Make sure `addr` is OK by calling `_check_addr`. If OK, return value
         # from `_cells` or default if never written. (Hint: use `.get()`.)
@@ -63,6 +62,8 @@ class Memory:
         Write 16-bit word to memory, masking to 16 bits.
         """
         # Check to see if `_write_enable` is true. If not, raise `RuntimeError`
+        if STACK_BASE < addr or addr > STACK_TOP:
+            raise ValueError("Address is out of range.")
         if self._write_enable == True:
              # Otherwise, call `_check_addr()`. If OK, write masked value to the
             if self._check_addr(addr) == True:
@@ -132,6 +133,7 @@ class InstructionMemory(Memory):
         if not self._loading:
             raise RuntimeError("Cannot write to instruction memory outside of loader.")
         super().write(addr, value)
+        
         return True
 
     def load_program(self, words, start_addr=0x0000):
@@ -145,11 +147,12 @@ class InstructionMemory(Memory):
         wordsLst = list(enumerate(words))
         for i, w in wordsLst:
             super().write(start_addr + i, w)
-        # `super().write(start_addr + offset, word)` as needed. Important:
-        # Ensure that `_loading` and `_write_enable` are set to `False` when
-        # done. (Hint: use `try`/`finally`.) Replace `pass` below.
+            # `super().write(start_addr + offset, word)` as needed. Important:
+            # Ensure that `_loading` and `_write_enable` are set to `False` when
+            # done. (Hint: use `try`/`finally`.) Replace `pass` below.
         self._loading = False
-        self._write_enable(self,False)
+        self.write_enable(False)
+        
 
 
 if __name__ == "__main__":
