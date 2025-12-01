@@ -86,13 +86,20 @@ class Cpu:
                     data = upper | lower
                     self._regs.execute(rd=rd, data=data, write_enable=True)
                 case "LOAD":
-                    pass  # complete implementation here
+                    pass
+
                 case "STORE":
                     pass  # complete implementation here
                 case "ADDI":
                     pass  # complete implementation here
                 case "ADD":
-                    pass  # complete implementation here
+                    self._alu.set_op("ADD")
+                    rd = self._decoded.rd
+                    ra = self._decoded.ra
+                    rb = self._decoded.rb
+                    op_a, op_b = self._regs.execute(ra=ra, rb=rb)
+                    result = self._alu.execute(op_a, op_b)
+                    self._regs.execute(rd=rd, data=result, write_enable=True)
                 case "SUB":
                     pass  # complete implementation here
                 case "AND":
