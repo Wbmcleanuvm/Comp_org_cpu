@@ -140,12 +140,13 @@ class InstructionMemory(Memory):
         """
         Load list of 16-bit words into consecutive memory cells.
         """
-        self._loading = True
-        self._write_enable(self,True)
+        
         # Write each word in `words` to successive addresses in instruction
         # memory. Set `_write_enable` as needed can call parent write with
         wordsLst = list(enumerate(words))
         for i, w in wordsLst:
+            self._loading = True
+            self._write_enable = True 
             super().write(start_addr + i, w)
             # `super().write(start_addr + offset, word)` as needed. Important:
             # Ensure that `_loading` and `_write_enable` are set to `False` when
