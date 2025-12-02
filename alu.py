@@ -178,21 +178,32 @@ class Alu:
         return result
     
     def _shft(self, a, b):
+        """
+        SHFT
 
-        a &= WORD_MASK
-        result = 0
-        bit_out = 0
-        if b > 0:
+        shift left if MSB of B == 0, right otherwise; no shift if b = 0
+
+        Keep in mind when we shift we need to keep track of the
+        last bit shifted out. This is used to set the carry flag.
+        """
+
+        a &= WORD_MASK  # Keep this line as is
+        MSB = (b >> (WORD_SIZE - 1)) & 0b1  # Get MSB of b
+        
+        # Replace these two lines with a complete implementation
+
+        if MSB == 0:
             # Left shift
-            bit_out = (a >> (WORD_SIZE - b)) & 0b1 if b <= WORD_SIZE else 0
-            result = (a << b) & WORD_MASK
-        elif b < 0:
-            shift_amount = -b
-            bit_out = (a >> (shift_amount - 1)) & 0b1 if shift_amount < WORD_SIZE else (a != 0)
-            result = (a >> shift_amount) & WORD_MASK
-        else:
+            bit_out = a >> (WORD_SIZE - 1) # get last bit shifted out
+            result = (a << (b & 0xF)) & WORD_MASK
+        elif b == 0:
+            # No shift
             result = a
-            bit_out = 0
+            bit_out = 0  # carry flag unchanged
+        else:
+            # Right shift
+            bit_out = a & 0b1  # get last bit shifted out
+            result = (a >> (b & 0xF)) & WORD_MASK
 
         # Keep these last two lines as they are
         self._update_shift_flags(result, bit_out)
