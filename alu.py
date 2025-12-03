@@ -194,15 +194,15 @@ class Alu:
 
         if MSB == 0:
             # Left shift
-            bit_out = a >> (WORD_SIZE - 1) # get last bit shifted out
+            bit_out = (a << b -1 )
             result = (a << (b & 0xF)) & WORD_MASK
         elif b == 0:
             # No shift
             result = a
-            bit_out = 0  # carry flag unchanged
+            bit_out = 0
         else:
             # Right shift
-            bit_out = a & 0b1  # get last bit shifted out
+            bit_out = 
             result = (a >> (b & 0xF)) & WORD_MASK
 
         # Keep these last two lines as they are
