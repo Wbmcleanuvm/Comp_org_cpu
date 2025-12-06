@@ -164,7 +164,7 @@ class Cpu:
                     self._sp -= 1  # grow stack downward
                     # PC is incremented immediately upon fetch so already
                     # pointing to next instruction, which is return address.
-                    ret_addr = self._pc  # explicit
+                    ret_addr = self._pc + 1 # explicit
                     self._d_mem.write_enable(True)
                     # push return address...
                     self._d_mem.write(self._sp, ret_addr, from_stack=True)
@@ -175,7 +175,7 @@ class Cpu:
                     # Increment SP
                     # Update PC
                     self._d_mem.write_enable(False)
-                    ret_addr = self._d_mem.read(self._sp, from_stack=True)
+                    ret_addr = self._d_mem.read(self._sp)
                     self._sp += 1
                     self._pc = ret_addr
                 case "HALT":
