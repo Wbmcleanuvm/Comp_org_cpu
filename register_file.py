@@ -45,7 +45,7 @@ class Register:
         self.value = value
 
     def __repr__(self):
-        return f"{self.name}: {self.value:04X}"
+        return f"{self.raw:04X}"
 
 
 class RegisterFile:
@@ -53,6 +53,9 @@ class RegisterFile:
     Two read port, one write port register file, with the specified number
     of registers.
     """
+    @property
+    def raw(self):
+        return self.value & 0xFFFF  # always unsigned
 
     NUM_REGISTERS = 8
 
@@ -166,6 +169,8 @@ class RegisterFile:
         # Notice that this expects a member field `registers`, a list.
         vals = [str(r) for r in self.registers]
         return "\n".join(vals)
+    
+    
 
 
 if __name__ == "__main__":

@@ -186,24 +186,22 @@ class Alu:
         Keep in mind when we shift we need to keep track of the
         last bit shifted out. This is used to set the carry flag.
         """
-
+        shift = b & 0xF
         a &= WORD_MASK  # Keep this line as is
         MSB = (b >> (WORD_SIZE - 1)) & 0b1  # Get MSB of b
         
         # Replace these two lines with a complete implementation
-
-        if MSB == 0:
-            # Left shift
-            bit_out = (a << b -1 )
-            result = (a << (b & 0xF)) & WORD_MASK
-        elif b == 0:
-            # No shift
+        if shift == 0:
             result = a
             bit_out = 0
         else:
-            # Right shift
-            bit_out = 
-            result = (a >> (b & 0xF)) & WORD_MASK
+            if MSB == 0:
+                # Left shift
+                bit_out = (a >> (WORD_SIZE - shift)) & 0b1 
+                result = (a << (b & 0xF)) & WORD_MASK
+            else:
+                bit_out = (a >> (shift - 1)) & 0b1
+                result = (a >> (b & 0xF)) & WORD_MASK
 
         # Keep these last two lines as they are
         self._update_shift_flags(result, bit_out)
